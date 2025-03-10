@@ -1,0 +1,19 @@
+body {
+    font-family: Arial, sans-serif;
+    background: url('https://imgs.search.brave.com/s_hHaW9lEbz6gKDOtwny5HJMqrbj8oyoH8bIJe3yEQc/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9sZS1j/ZG4ud2Vic2l0ZS1l/ZGl0b3IubmV0L3Mv/NjllMzUxNzBmMDMx/NDhkMDhhZDNmNzQz/ZDU5OWYwNDkvZG1z/M3JlcC9tdWx0aS9v/cHQvRmVycmV0ZXJp/YStDb3JhXzAwNy0x/OTIwdy5qcGc_RXhw/aXJlcz0xNzQwOTYx/MTI5JlNpZ25hdHVy/ZT1TanNTN2d3RWs4/dkFKQm85RnB2cX54/S3YtcmJ2d2trSmNl/REt6UzFYMFZDeGFZ/WFpoa1lJbUZoQWlG/Sm5ERi1ESDA0Mjl3/VHI5ZH56RW1Qa3BP/M2dYYWFlTTkyQzFx/eVQzWVR4RlRlbG9P/d1NPflctR21OSmlo/RHVvbG5WODNCTGJs/LS05VDJ2RXl1WjlL/YWM5MFZ0TzQ2a25G/ZDYxSmZXN0EzZzdT/YX5vTE11TjM1NGFX/V3hkaUJVczhKRUtQ/ZzFvNHJOUG8wMWsx/Rkk5eEJHOUhnR2RY/OUNxRmhTRFc5enJV/bmNRSmpVeFZmNEpS/YVc5WE42ZU95WDlJ/VVMweFZhZTc0MzVG/UVNtSFlDaVpueHE4/QncxU3NRQ3pHeDN0/RjBNSndLWmlTVVV6/QS1ybnZlaGpjUXJB/NFFPdjZ0bTk2bjF6/aDZ2cmlzaEoxT2ZT/NkJhZkpPcHdfXyZL/ZXktUGFpci1JZD1L/Mk5YQlhMRjAxMFRK/Vw') no-repeat center center fixed;
+    background-size: cover;
+
+}
+
+h1 {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.container {
+    margin-top: 50px;
+}
+
+.alert {
+    margin-top: 20px;
+}
