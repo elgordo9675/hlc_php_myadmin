@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 01-03-2025 a las 22:05:02
+-- Tiempo de generación: 12-03-2025 a las 21:20:16
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -61,7 +61,15 @@ CREATE TABLE `detalle_ventas` (
 
 INSERT INTO `detalle_ventas` (`id`, `venta_id`, `producto_id`, `cantidad`, `precio_unitario`) VALUES
 (1, 1, 1, 1, 12.50),
-(2, 2, 4, 1, 15.99);
+(2, 2, 4, 1, 15.99),
+(3, 3, 1, 1, 12.50),
+(4, 4, 1, 3, 12.50),
+(5, 5, 2, 1, 7.25),
+(6, 6, 2, 1, 7.25),
+(7, 6, 1, 2, 12.50),
+(8, 7, 1, 1, 12.50),
+(9, 8, 1, 2, 12.50),
+(10, 9, 2, 1, 7.25);
 
 -- --------------------------------------------------------
 
@@ -82,11 +90,10 @@ CREATE TABLE `productos` (
 --
 
 INSERT INTO `productos` (`id`, `nombre`, `descripcion`, `precio`, `stock`) VALUES
-(1, 'Martillo', 'Un martillo resistente y duradero.', 12.50, 99),
-(2, 'Destornillador', 'Destornillador de precisión.', 7.25, 200),
+(1, 'Martillo', 'Un martillo resistente y duradero.', 12.50, 90),
+(2, 'Destornillador', 'Destornillador de precisión.', 7.25, 197),
 (3, 'Taladro', 'Taladro inalámbrico con batería de larga duración.', 89.99, 50),
-(4, 'Llave Inglesa', 'Llave inglesa ajustable.', 15.99, 74),
-(5, 'Tornillo', 'Fuerte y resistente', 0.20, 1000);
+(4, 'Llave Inglesa', 'Llave inglesa ajustable.', 15.99, 74);
 
 -- --------------------------------------------------------
 
@@ -132,7 +139,9 @@ INSERT INTO `usuarios` (`id`, `usuario`, `password`, `rol`, `validado`) VALUES
 (2, 'paco', '$2y$10$xH/D1aZsyYXzbyzI7QkcmOA0tSujt7ua7Wy0EBYMgSeMqn4xMvPEi', 'cliente', 1),
 (5, 'cliente1', '$2y$10$V9zx2XzXYLnlMeOb8rIb./25cz.SYdx2hlVu4hA2lXLlhbDHk6PMi', 'cliente', 1),
 (6, 'cliente2', '$2y$10$L1vL1vL1vL1vL1vL1vL1vO.vMSTGOIzi3PDuWk98L8jLyKh6NzJ5y', 'cliente', 1),
-(9, 'raul', '$2y$10$lXkRltA0NQN20hTb.hPBoOUjB7Y1Uh/wvSgUZwQY4ptUu/plyZKHi', 'administrador', 1);
+(9, 'raul', '$2y$10$lXkRltA0NQN20hTb.hPBoOUjB7Y1Uh/wvSgUZwQY4ptUu/plyZKHi', 'administrador', 1),
+(10, 'jose', '$2y$10$Kdpx4ApVzE.G2GX9Re1MIOp6gyy0QWs7k9SksGD3gXCa19Nky8nYi', 'cliente', 1),
+(12, 'jose', '$2y$10$BwPByfWlNgVp1v8afOXcNee94MWzeqyqL/IEyVJDW1ZG3bbtphsCS', 'cliente', 1);
 
 -- --------------------------------------------------------
 
@@ -153,7 +162,14 @@ CREATE TABLE `ventas` (
 
 INSERT INTO `ventas` (`id`, `usuario_id`, `fecha`, `total`) VALUES
 (1, 2, '2025-02-28 15:00:06', 12.50),
-(2, 2, '2025-03-01 00:28:19', 15.99);
+(2, 2, '2025-03-01 00:28:19', 15.99),
+(3, 2, '2025-03-03 02:56:27', 12.50),
+(4, 2, '2025-03-03 02:58:10', 37.50),
+(5, 2, '2025-03-03 15:59:38', 7.25),
+(6, 10, '2025-03-03 16:04:59', 32.25),
+(7, 2, '2025-03-09 17:59:09', 12.50),
+(8, 2, '2025-03-09 17:59:54', 25.00),
+(9, 2, '2025-03-12 18:53:31', 7.25);
 
 --
 -- Índices para tablas volcadas
@@ -213,7 +229,7 @@ ALTER TABLE `categorias`
 -- AUTO_INCREMENT de la tabla `detalle_ventas`
 --
 ALTER TABLE `detalle_ventas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `productos`
@@ -225,13 +241,13 @@ ALTER TABLE `productos`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `ventas`
 --
 ALTER TABLE `ventas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Restricciones para tablas volcadas

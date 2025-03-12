@@ -37,7 +37,7 @@
                 </form>
             </div>
         </div>
-        
+
         <?php
         // Incluir el archivo de conexión a la base de datos
         include('db.php');
@@ -50,29 +50,29 @@
         // Construir la consulta SQL para filtrar productos
         $sql = "SELECT * FROM productos WHERE 1=1";
         if ($nombre != '') {
-            $sql .= " AND nombre LIKE '%$nombre%'";
+            $sql .= " AND nombre LIKE '%" . mysqli_real_escape_string($conn, $nombre) . "%'";
         }
         if ($precio_min != '') {
-            $sql .= " AND precio >= $precio_min";
+            $sql .= " AND precio >= " . mysqli_real_escape_string($conn, $precio_min);
         }
         if ($precio_max != '') {
-            $sql .= " AND precio <= $precio_max";
+            $sql .= " AND precio <= " . mysqli_real_escape_string($conn, $precio_max);
         }
 
         // Ejecutar la consulta
-        $result = $conn->query($sql);
+        $result = mysqli_query($conn, $sql);
 
         // Verificar si se encontraron productos
-        if ($result->num_rows > 0) {
+        if (mysqli_num_rows($result) > 0) {
             // Mostrar los productos en una tabla
             echo "<table class='table table-bordered mt-3'>";
             echo "<thead><tr><th>Nombre</th><th>Descripción</th><th>Precio</th><th>Stock</th></tr></thead><tbody>";
-            while($row = $result->fetch_assoc()) {
+            while ($row = mysqli_fetch_assoc($result)) {
                 echo "<tr>
-                        <td>".$row["nombre"]."</td>
-                        <td>".$row["descripcion"]."</td>
-                        <td>".$row["precio"]."</td>
-                        <td>".$row["stock"]."</td>
+                        <td>" . htmlspecialchars($row["nombre"]) . "</td>
+                        <td>" . htmlspecialchars($row["descripcion"]) . "</td>
+                        <td>" . htmlspecialchars($row["precio"]) . "</td>
+                        <td>" . htmlspecialchars($row["stock"]) . "</td>
                     </tr>";
             }
             echo "</tbody></table>";
@@ -82,7 +82,7 @@
         }
 
         // Cerrar la conexión con la base de datos
-        $conn->close();
+        mysqli_close($conn);
         ?>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

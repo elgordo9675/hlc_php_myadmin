@@ -16,14 +16,14 @@
 
         // Consultar todos los productos en la base de datos
         $sql = "SELECT * FROM productos";
-        $result = $conn->query($sql);
+        $result = mysqli_query($conn, $sql);
 
         // Verificar si se encontraron productos
-        if ($result->num_rows > 0) {
+        if (mysqli_num_rows($result) > 0) {
             echo "<table class='table table-bordered mt-3'>";
             echo "<thead><tr><th>Nombre</th><th>Descripción</th><th>Precio</th><th>Stock</th></tr></thead><tbody>";
-            while ($row = $result->fetch_assoc()) {
-                echo "<tr><td>" . $row["nombre"] . "</td><td>" . $row["descripcion"] . "</td><td>" . $row["precio"] . "</td><td>" . $row["stock"] . "</td></tr>";
+            while ($row = mysqli_fetch_assoc($result)) {
+                echo "<tr><td>" . htmlspecialchars($row["nombre"]) . "</td><td>" . htmlspecialchars($row["descripcion"]) . "</td><td>" . htmlspecialchars($row["precio"]) . "</td><td>" . htmlspecialchars($row["stock"]) . "</td></tr>";
             }
             echo "</tbody></table>";
         } else {
@@ -31,7 +31,7 @@
         }
 
         // Cerrar la conexión con la base de datos
-        $conn->close();
+        mysqli_close($conn);
         ?>
     </div>
     <!-- Enlace a Bootstrap JS y dependencias -->

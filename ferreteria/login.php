@@ -62,18 +62,18 @@
         include('db.php');
 
         // Obtener los valores del formulario
-        $usuario = $_POST['usuario'];       // Nombre de usuario ingresado
-        $password = $_POST['password'];     // Contraseña ingresada
+        $usuario = mysqli_real_escape_string($conn, $_POST['usuario']);
+        $password = $_POST['password'];
 
         // Buscar al usuario en la base de datos
         $sql = "SELECT * FROM usuarios WHERE usuario='$usuario'";
-        $result = $conn->query($sql);
+        $result = mysqli_query($conn, $sql);
 
         // Verificar si se encontró el usuario
-        if ($result->num_rows > 0) {
+        if (mysqli_num_rows($result) > 0) {
             // Obtener los datos del usuario
-            $row = $result->fetch_assoc();
-            
+            $row = mysqli_fetch_assoc($result);
+
             // Verificar si la contraseña es correcta
             if (password_verify($password, $row['password'])) {
                 // Almacenar datos del usuario en la sesión
@@ -103,7 +103,7 @@
         }
 
         // Cerrar la conexión con la base de datos
-        $conn->close();
+        mysqli_close($conn);
     }
     ?>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

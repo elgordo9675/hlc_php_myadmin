@@ -28,15 +28,15 @@
 
         // Consultar todos los usuarios en la base de datos
         $sql = "SELECT usuario, rol FROM usuarios";
-        $result = $conn->query($sql);
+        $result = mysqli_query($conn, $sql);
 
         // Inicializar arrays para almacenar usuarios por rol
-        $clientes = [];
-        $administradores = [];
+        $clientes = array();
+        $administradores = array();
 
         // Verificar si se encontraron usuarios
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
+        if (mysqli_num_rows($result) > 0) {
+            while ($row = mysqli_fetch_assoc($result)) {
                 if ($row["rol"] == "cliente") {
                     $clientes[] = $row["usuario"];
                 } else if ($row["rol"] == "administrador") {
@@ -52,7 +52,7 @@
             echo "<h2 class='mt-5'>Clientes</h2>";
             echo "<ul class='list-group'>";
             foreach ($clientes as $cliente) {
-                echo "<li class='list-group-item'>$cliente</li>";
+                echo "<li class='list-group-item'>" . htmlspecialchars($cliente) . "</li>";
             }
             echo "</ul>";
         }
@@ -61,13 +61,13 @@
             echo "<h2 class='mt-5'>Administradores</h2>";
             echo "<ul class='list-group'>";
             foreach ($administradores as $admin) {
-                echo "<li class='list-group-item'>$admin</li>";
+                echo "<li class='list-group-item'>" . htmlspecialchars($admin) . "</li>";
             }
             echo "</ul>";
         }
 
         // Cerrar la conexión con la base de datos
-        $conn->close();
+        mysqli_close($conn);
         ?>
     </div>
     <!-- Enlace a Bootstrap JS y dependencias -->

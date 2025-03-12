@@ -13,28 +13,32 @@ include('db.php');
 
 // Aprobar o rechazar solicitudes de administrador
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Usar sentencias preparadas para evitar inyección SQL
     if (isset($_POST['aprobar'])) {
         $usuario_id = intval($_POST['usuario_id']); // Convertir a entero por seguridad
-        $stmt = $conn->prepare("UPDATE usuarios SET validado = 1 WHERE id = ?");
-        $stmt->bind_param("i", $usuario_id);
-        $stmt->execute();
+        $sql = "UPDATE usuarios SET validado = 1 WHERE id = ?";
+        $stmt = mysqli_prepare($conn, $sql);
+        mysqli_stmt_bind_param($stmt, "i", $usuario_id);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
         header("Location: validar.php?status=aprobado");
         exit();
     } elseif (isset($_POST['rechazar'])) {
         $usuario_id = intval($_POST['usuario_id']);
-        $stmt = $conn->prepare("DELETE FROM usuarios WHERE id = ?");
-        $stmt->bind_param("i", $usuario_id);
-        $stmt->execute();
+        $sql = "DELETE FROM usuarios WHERE id = ?";
+        $stmt = mysqli_prepare($conn, $sql);
+        mysqli_stmt_bind_param($stmt, "i", $usuario_id);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
         header("Location: validar.php?status=rechazado");
         exit();
     }
 }
 
 // Consultar administradores pendientes
-$stmt = $conn->prepare("SELECT id, usuario FROM usuarios WHERE rol = 'administrador' AND validado = 0");
-$stmt->execute();
-$result = $stmt->get_result();
+$sql = "SELECT id, usuario FROM usuarios WHERE rol = 'administrador' AND validado = 0";
+$stmt = mysqli_prepare($conn, $sql);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -66,20 +70,20 @@ $result = $stmt->get_result();
         }
 
         // Verificar si hay solicitudes pendientes
-        if ($result->num_rows > 0) {
+        if (mysqli_num_rows($result) > 0) {
             echo "<table class='table table-bordered mt-3'>";
             echo "<thead><tr><th>Usuario</th><th>Acciones</th></tr></thead><tbody>";
-            while ($row = $result->fetch_assoc()) {
+            while ($row = mysqli_fetch_assoc($result)) {
                 echo "<tr>
-                    <td>{$row['usuario']}</td>
+                    <td>" . htmlspecialchars($row['usuario']) . "</td>
                     <td>
                         <form action='validar.php' method='post' style='display:inline;'>
-                            <input type='hidden' name='usuario_id' value='{$row['id']}'>
+                            <input type='hidden' name='usuario_id' value='" . htmlspecialchars($row['id']) . "'>
                             <button type='submit' name='aprobar' class='btn btn-success btn-sm'>Aprobar</button>
                         </form>
 
                         <form action='validar.php' method='post' style='display:inline;'>
-                            <input type='hidden' name='usuario_id' value='{$row['id']}'>
+                            <input type='hidden' name='usuario_id' value='" . htmlspecialchars($row['id']) . "'>
                             <button type='submit' name='rechazar' class='btn btn-danger btn-sm'>Rechazar</button>
                         </form>
                     </td>
@@ -89,6 +93,10 @@ $result = $stmt->get_result();
         } else {
             echo "<div class='alert alert-warning text-center mt-3'>No hay solicitudes de administrador pendientes.</div>";
         }
+
+        // Cerrar el statement y conexión
+        mysqli_stmt_close($stmt);
+        mysqli_close($conn);
         ?>
         <div class="text-center mt-3">
             <a href="admin_menu.php" class="btn btn-primary">Volver al Menú del Administrador</a>

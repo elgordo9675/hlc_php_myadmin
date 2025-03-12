@@ -23,15 +23,15 @@ if (!isset($_SESSION['usuario'])) {
 
     // Consultar todos los productos en la base de datos
     $sql = "SELECT * FROM productos";
-    $result = $conn->query($sql);
+    $result = mysqli_query($conn, $sql);
 
     // Verificar si se encontraron productos
-    if ($result->num_rows > 0) {
+    if (mysqli_num_rows($result) > 0) {
         // Mostrar los productos en una tabla
         echo "<table>";
         echo "<tr><th>Nombre</th><th>Descripción</th><th>Precio</th></tr>";
-        while($row = $result->fetch_assoc()) {
-            echo "<tr><td>".$row["nombre"]."</td><td>".$row["descripcion"]."</td><td>".$row["precio"]."</td></tr>";
+        while ($row = mysqli_fetch_assoc($result)) {
+            echo "<tr><td>" . htmlspecialchars($row["nombre"]) . "</td><td>" . htmlspecialchars($row["descripcion"]) . "</td><td>" . htmlspecialchars($row["precio"]) . "</td></tr>";
         }
         echo "</table>";
     } else {
@@ -39,7 +39,7 @@ if (!isset($_SESSION['usuario'])) {
     }
 
     // Cerrar la conexión con la base de datos
-    $conn->close();
+    mysqli_close($conn);
     ?>
 </body>
 </html>

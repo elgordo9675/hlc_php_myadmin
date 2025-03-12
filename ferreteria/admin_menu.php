@@ -32,6 +32,7 @@ if (!isset($_SESSION['usuario']) || $_SESSION['rol'] != 'administrador') {
             <!-- Enlaces a las diferentes funcionalidades del administrador -->
             <a href="modificar_datos.php" class="list-group-item list-group-item-action">Modificar Producto</a>
             <a href="modificar_datos.php" class="list-group-item list-group-item-action">Eliminar Producto</a>
+            <a href="añadir_producto.php" class="list-group-item list-group-item-action">Añadir Producto</a> <!-- Nuevo enlace -->
             <a href="validar.php" class="list-group-item list-group-item-action">Validar Administradores</a>
             <a href="leer_usuarios.php" class="list-group-item list-group-item-action">Usuarios</a>
             <a href="logout.php" class="list-group-item list-group-item-action">Cerrar Sesión</a>

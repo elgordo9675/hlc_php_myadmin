@@ -12,7 +12,6 @@
             background-size: cover;
             background-blend-mode: overlay;
             background-color: rgba(255, 255, 255, 0.5); /* Ajusta la transparencia aquí */
-
         }
     </style>
 </head>
@@ -40,19 +39,25 @@
             $precio = $_POST['precio'];  // Precio del producto
             $stock = $_POST['stock'];  // Cantidad de stock del producto
 
+            // Escapar datos para evitar inyección de SQL
+            $nombre = mysqli_real_escape_string($conn, $nombre);
+            $descripcion = mysqli_real_escape_string($conn, $descripcion);
+            $precio = mysqli_real_escape_string($conn, $precio);
+            $stock = mysqli_real_escape_string($conn, $stock);
+
             // Insertar los valores en la tabla de productos
             $sql = "INSERT INTO productos (nombre, descripcion, precio, stock) VALUES ('$nombre', '$descripcion', '$precio', '$stock')";
             
             // Verificar si la inserción ha sido exitosa
-            if ($conn->query($sql) === TRUE) {
+            if (mysqli_query($conn, $sql)) {
                 echo "<div class='alert alert-success text-center mt-3'>Producto añadido exitosamente.</div>";
             } else {
                 // Mostrar mensaje de error si la inserción falla
-                echo "<div class='alert alert-danger text-center mt-3'>Error: " . $sql . "<br>" . $conn->error . "</div>";
+                echo "<div class='alert alert-danger text-center mt-3'>Error: " . $sql . "<br>" . mysqli_error($conn) . "</div>";
             }
 
             // Cerrar la conexión con la base de datos
-            $conn->close();
+            mysqli_close($conn);
         }
         ?>
         <div class="row justify-content-center">

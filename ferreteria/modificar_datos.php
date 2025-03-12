@@ -34,19 +34,19 @@
         // Verificar si se ha enviado el formulario para modificar un producto
         if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['modificar'])) {
             $id = $_POST['id'];
-            $nombre = $_POST['nombre'];
-            $descripcion = $_POST['descripcion'];
-            $precio = $_POST['precio'];
-            $stock = $_POST['stock'];
+            $nombre = mysqli_real_escape_string($conn, $_POST['nombre']);
+            $descripcion = mysqli_real_escape_string($conn, $_POST['descripcion']);
+            $precio = mysqli_real_escape_string($conn, $_POST['precio']);
+            $stock = mysqli_real_escape_string($conn, $_POST['stock']);
 
             // Actualizar los valores del producto en la base de datos
             $sql = "UPDATE productos SET nombre='$nombre', descripcion='$descripcion', precio='$precio', stock='$stock' WHERE id=$id";
-            
+
             // Verificar si la actualización ha sido exitosa
-            if ($conn->query($sql) === TRUE) {
+            if (mysqli_query($conn, $sql)) {
                 echo "<div class='alert alert-success text-center mt-3'>Producto modificado exitosamente.</div>";
             } else {
-                echo "<div class='alert alert-danger text-center mt-3'>Error: " . $sql . "<br>" . $conn->error . "</div>";
+                echo "<div class='alert alert-danger text-center mt-3'>Error: " . $sql . "<br>" . mysqli_error($conn) . "</div>";
             }
         }
 
@@ -56,12 +56,12 @@
 
             // Eliminar el producto de la base de datos
             $sql = "DELETE FROM productos WHERE id=$id";
-            
+
             // Verificar si la eliminación ha sido exitosa
-            if ($conn->query($sql) === TRUE) {
+            if (mysqli_query($conn, $sql)) {
                 echo "<div class='alert alert-success text-center mt-3'>Producto eliminado exitosamente.</div>";
             } else {
-                echo "<div class='alert alert-danger text-center mt-3'>Error: " . $sql . "<br>" . $conn->error . "</div>";
+                echo "<div class='alert alert-danger text-center mt-3'>Error: " . $sql . "<br>" . mysqli_error($conn) . "</div>";
             }
         }
 
@@ -69,8 +69,8 @@
         if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['seleccionar'])) {
             $id = $_POST['id'];
             $sql = "SELECT * FROM productos WHERE id=$id";
-            $result = $conn->query($sql);
-            $producto = $result->fetch_assoc();
+            $result = mysqli_query($conn, $sql);
+            $producto = mysqli_fetch_assoc($result);
         }
         ?>
 
@@ -82,9 +82,9 @@
                     <?php
                     // Consultar todos los productos en la base de datos
                     $sql = "SELECT id, nombre FROM productos";
-                    $result = $conn->query($sql);
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<option value='" . $row["id"] . "'>" . $row["nombre"] . "</option>";
+                    $result = mysqli_query($conn, $sql);
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        echo "<option value='" . $row["id"] . "'>" . htmlspecialchars($row["nombre"]) . "</option>";
                     }
                     ?>
                 </select>
@@ -99,19 +99,19 @@
             <input type="hidden" name="id" value="<?php echo $producto['id']; ?>">
             <div class="form-group">
                 <label for="nombre">Nombre:</label>
-                <input type="text" id="nombre" name="nombre" class="form-control" value="<?php echo $producto['nombre']; ?>" required>
+                <input type="text" id="nombre" name="nombre" class="form-control" value="<?php echo htmlspecialchars($producto['nombre']); ?>" required>
             </div>
             <div class="form-group">
                 <label for="descripcion">Descripción:</label>
-                <textarea id="descripcion" name="descripcion" class="form-control" required><?php echo $producto['descripcion']; ?></textarea>
+                <textarea id="descripcion" name="descripcion" class="form-control" required><?php echo htmlspecialchars($producto['descripcion']); ?></textarea>
             </div>
             <div class="form-group">
                 <label for="precio">Precio:</label>
-                <input type="number" step="0.01" id="precio" name="precio" class="form-control" value="<?php echo $producto['precio']; ?>" required>
+                <input type="number" step="0.01" id="precio" name="precio" class="form-control" value="<?php echo htmlspecialchars($producto['precio']); ?>" required>
             </div>
             <div class="form-group">
                 <label for="stock">Stock:</label>
-                <input type="number" id="stock" name="stock" class="form-control" value="<?php echo $producto['stock']; ?>" required>
+                <input type="number" id="stock" name="stock" class="form-control" value="<?php echo htmlspecialchars($producto['stock']); ?>" required>
             </div>
             <button type="submit" name="modificar" class="btn btn-primary btn-block">Modificar Producto</button>
             <button type="submit" name="eliminar" class="btn btn-danger btn-block">Eliminar Producto</button>
@@ -124,4 +124,3 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
-

@@ -42,25 +42,25 @@ if (!$esCliente && !isset($_SESSION['usuario'])) {
 
         // Consultar todos los productos en la base de datos
         $sql = "SELECT * FROM productos";
-        $result = $conn->query($sql);
+        $result = mysqli_query($conn, $sql);
 
         // Verificar si se encontraron productos
-        if ($result->num_rows > 0) {
+        if (mysqli_num_rows($result) > 0) {
             echo "<table class='table table-bordered mt-3'>";
             echo "<thead><tr><th>Nombre</th><th>Descripción</th><th>Precio</th>";
             if ($esCliente) {
                 echo "<th>Acciones</th>";
             }
             echo "</tr></thead><tbody>";
-            while($row = $result->fetch_assoc()) {
+            while ($row = mysqli_fetch_assoc($result)) {
                 echo "<tr>
-                        <td>".$row["nombre"]."</td>
-                        <td>".$row["descripcion"]."</td>
-                        <td>".$row["precio"]."</td>";
+                        <td>" . htmlspecialchars($row["nombre"]) . "</td>
+                        <td>" . htmlspecialchars($row["descripcion"]) . "</td>
+                        <td>" . htmlspecialchars($row["precio"]) . "</td>";
                 if ($esCliente) {
                     echo "<td>
                             <!-- Botón para agregar el producto a la cesta -->
-                            <a href='añadir_cesta.php?id=".$row["id"]."' class='btn btn-primary btn-sm'>Añadir a la Cesta</a>
+                            <a href='añadir_cesta.php?id=" . $row["id"] . "' class='btn btn-primary btn-sm'>Añadir a la Cesta</a>
                           </td>";
                 }
                 echo "</tr>";
@@ -71,7 +71,7 @@ if (!$esCliente && !isset($_SESSION['usuario'])) {
         }
 
         // Cerrar la conexión con la base de datos
-        $conn->close();
+        mysqli_close($conn);
         ?>
     </div>
     <!-- Enlace a Bootstrap JS y dependencias -->
@@ -80,3 +80,4 @@ if (!$esCliente && !isset($_SESSION['usuario'])) {
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
+

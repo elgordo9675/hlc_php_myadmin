@@ -26,9 +26,14 @@
                         <label for="usuario">Usuario:</label>
                         <input type="text" id="usuario" name="usuario" class="form-control" required>
                         <label for="apellido1">Apellido1:</label>
-                        <input type="text" id="Apellido1" name="apellido1" class="form-control" required>
+                        <input type="text" id="apellido1" name="apellido1" class="form-control" required>
                         <label for="apellido2">Apellido2:</label>
-                        <input type="text" id="Apellido2" name="apellido2" class="form-control" required>
+                        <input type="text" id="apellido2" name="apellido2" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <!-- Campo para ingresar el email -->
+                        <label for="email">Correo Electrónico:</label>
+                        <input type="email" id="email" name="email" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <!-- Campo para ingresar la contraseña -->
@@ -57,30 +62,39 @@
         // Incluir el archivo de conexión a la base de datos
         include('db.php');
         
-        // Obtener los valores del formulario
-        $usuario = $_POST['usuario'];
+        // Obtener los valores del formulario y sanitizarlos
+        $usuario = mysqli_real_escape_string($conn, $_POST['usuario']);
+        $apellido1 = mysqli_real_escape_string($conn, $_POST['apellido1']);
+        $apellido2 = mysqli_real_escape_string($conn, $_POST['apellido2']);
+        $email = mysqli_real_escape_string($conn, $_POST['email']); // Procesar el campo email
         $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Encriptar la contraseña
-        $rol = $_POST['rol'];
+        $rol = mysqli_real_escape_string($conn, $_POST['rol']);
 
-        // Si el rol es administrador, el campo 'validado' será 0 por defecto
-        $validado = ($rol == 'administrador') ? 0 : 1;
-
-        // Insertar los valores en la tabla de usuarios
-        $sql = "INSERT INTO usuarios (usuario, password, rol, validado) VALUES ('$usuario', '$password', '$rol', $validado)";
-        
-        // Verificar si la inserción ha sido exitosa
-        if ($conn->query($sql) === TRUE) {
-            if ($rol == 'administrador') {
-                echo "<div class='alert alert-warning text-center mt-3'>Registro exitoso. Espera validación de un administrador.</div>";
-            } else {
-                echo "<div class='alert alert-success text-center mt-3'>Registro exitoso.</div>";
-            }
+        // Validar que el email tenga un formato válido
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            echo "<div class='alert alert-danger text-center mt-3'>El formato del correo electrónico no es válido.</div>";
         } else {
-            echo "<div class='alert alert-danger text-center mt-3'>Error: " . $sql . "<br>" . $conn->error . "</div>";
+            // Si el rol es administrador, el campo 'validado' será 0 por defecto
+            $validado = ($rol == 'administrador') ? 0 : 1;
+
+            // Insertar los valores en la tabla de usuarios
+            $sql = "INSERT INTO usuarios (usuario, apellido1, apellido2, email, password, rol, validado) 
+                    VALUES ('$usuario', '$apellido1', '$apellido2', '$email', '$password', '$rol', $validado)";
+            
+            // Verificar si la inserción ha sido exitosa
+            if (mysqli_query($conn, $sql)) {
+                if ($rol == 'administrador') {
+                    echo "<div class='alert alert-warning text-center mt-3'>Registro exitoso. Espera validación de un administrador.</div>";
+                } else {
+                    echo "<div class='alert alert-success text-center mt-3'>Registro exitoso.</div>";
+                }
+            } else {
+                echo "<div class='alert alert-danger text-center mt-3'>Error: " . mysqli_error($conn) . "</div>";
+            }
         }
 
         // Cerrar la conexión con la base de datos
-        $conn->close();
+        mysqli_close($conn);
     }
     ?>
     <!-- Enlace a Bootstrap JS y dependencias -->

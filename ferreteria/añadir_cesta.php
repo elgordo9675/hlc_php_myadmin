@@ -11,8 +11,8 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['id'])) {
 
     // Consultar el producto seleccionado en la base de datos
     $sql = "SELECT * FROM productos WHERE id=$producto_id";
-    $result = $conn->query($sql);
-    $producto = $result->fetch_assoc();
+    $result = mysqli_query($conn, $sql);
+    $producto = mysqli_fetch_assoc($result);
 
     // Verificar si el producto fue encontrado
     if ($producto) {
@@ -25,12 +25,12 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['id'])) {
         if (isset($cesta[$producto_id])) {
             $cesta[$producto_id]['cantidad'] += $cantidad;  // Aumentar cantidad si ya está en la cesta
         } else {
-            $cesta[$producto_id] = [
+            $cesta[$producto_id] = array(
                 'id' => $producto_id,
                 'nombre' => $nombre,
                 'precio' => $precio,
                 'cantidad' => $cantidad,
-            ];
+            );
         }
 
         $_SESSION['cesta'] = $cesta;  // Actualizar la cesta en la sesión
@@ -39,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['id'])) {
         echo "<div class='alert alert-danger text-center mt-3'>Producto no encontrado.</div>";
     }
 
-    $conn->close();  // Cerrar la conexión con la base de datos
+    mysqli_close($conn);  // Cerrar la conexión con la base de datos
 }
 ?>
 <!DOCTYPE html>
